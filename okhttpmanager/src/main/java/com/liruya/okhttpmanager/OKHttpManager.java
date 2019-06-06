@@ -59,6 +59,34 @@ public class OKHttpManager
         return true;
     }
 
+    public Response blockGet( String url, Headers headers )
+    {
+        if ( url == null || "".equals( url ) )
+        {
+            return null;
+        }
+        Request request;
+        if ( headers == null )
+        {
+            request = new Request.Builder().url( url )
+                                           .build();
+        }
+        else
+        {
+            request = new Request.Builder().url( url )
+                                           .headers( headers )
+                                           .build();
+        }
+        try {
+            return mHttpClient.newCall( request )
+                              .execute();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     /**
      * post request
      *
@@ -123,6 +151,68 @@ public class OKHttpManager
         mHttpClient.newCall( request )
                    .enqueue( callback );
         return true;
+    }
+
+    public Response blockPost( String url, Headers headers, RequestBody body )
+    {
+        if ( url == null || "".equals( url ) || body == null )
+        {
+            return null;
+        }
+        Request request;
+        if ( headers == null )
+        {
+            request = new Request.Builder().url( url )
+                                           .post( body )
+                                           .build();
+        }
+        else
+        {
+            request = new Request.Builder().url( url )
+                                           .headers( headers )
+                                           .post( body )
+                                           .build();
+        }
+        try {
+            return mHttpClient.newCall( request )
+                              .execute();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Response blockPost ( String url, Headers headers, String json )
+    {
+        if ( url == null || "".equals( url ) || json == null || "".equals( json ) )
+        {
+            return null;
+        }
+        RequestBody body = RequestBody.create( JSON, json );
+        Request request;
+        if ( headers == null )
+        {
+            request = new Request.Builder().url( url )
+                                           .post( body )
+                                           .build();
+        }
+        else
+        {
+            request = new Request.Builder().url( url )
+                                           .headers( headers )
+                                           .post( body )
+                                           .build();
+        }
+
+        try {
+            return mHttpClient.newCall( request )
+                              .execute();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
